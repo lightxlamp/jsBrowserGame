@@ -30,16 +30,21 @@ var
       obj.greeting = function() {
         alert('Hi! I\'m ' + this.name + '.' + ' width = ' + this.width);
       };
+
+      obj.draw = function(){
+        ctx.drawImage(this.heroImage, this.positionX, this.positionY, this.width, this.height);
+      }
   return obj;
 }
 
 var heroStas = createNewHero('StasTest');
-console.log(heroStas.heroImage);
+heroStas.draw();
 
+/*
 window.onload = function() {
   document.addEventListener('keydown', changeDirection);
   setInterval(loop(heroStas), 1000/2); // 60 FPS
-}
+} */
 
  function drawHero(hero) {
 	ctx.drawImage(heroImage, hero.positionX, hero.positionY, hero.width, hero.height);
