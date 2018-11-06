@@ -1,7 +1,6 @@
-window.onload = function() {
-  document.addEventListener('keydown', changeDirection);
-  setInterval(loop, 1000/2); // 60 FPS
-}
+//Movement left bug fixed 
+//'use strict' added
+//'use strict'
 
 var
   canvas 			 = document.getElementById('mc'), // canvas
@@ -13,21 +12,37 @@ var
   aw = ah			 = 20, // apple size
   cooldown			 = false, // is key in cooldown mode
   score				 = 0; // current score
-  heroHeight         = 100;
-  heroWidth          = 100;
-  heroStartPositionX = canvas.width / 2 - heroWidth;
-  heroStartPositionY = canvas.height / 2 - heroHeight / 2;
-  heroPositionX = heroStartPositionX;
-  heroPositionY = heroStartPositionY;
-  
- //var image = document.getElementById('source');
-var hero 	= new Image(heroWidth, heroHeight);   // Using optional size for image
-//hero.onload = drawHero; // Draw when image has loaded
-hero.src 	= 'archer.jpg';
 
 
- function drawHero() {
-	ctx.drawImage(hero, heroPositionX, heroPositionY, heroWidth, heroHeight);
+  function createNewHero(name) {
+      var obj = {};
+      obj.name = name;
+      obj.height = 100;
+      obj.width = 100; 
+      obj.startPositionX = canvas.width / 2 - this.width;
+      obj.startPositionY = canvas.height / 2 - this.height / 2;
+      obj.positionX = this.startPositionX;
+      obj.positionY = this.startPositionY;
+      obj.heroImage = new Image(this.width, this.height); 
+      //hero.onload = drawHero; // Draw when image has loaded
+      obj.heroImage.src  = 'archer.jpg';
+
+      obj.greeting = function() {
+        alert('Hi! I\'m ' + this.name + '.' + ' width = ' + this.width);
+      };
+  return obj;
+}
+
+var heroStas = createNewHero('StasTest');
+console.log(heroStas.heroImage);
+
+window.onload = function() {
+  document.addEventListener('keydown', changeDirection);
+  setInterval(loop(heroStas), 1000/2); // 60 FPS
+}
+
+ function drawHero(hero) {
+	ctx.drawImage(heroImage, hero.positionX, hero.positionY, hero.width, hero.height);
 }
 
 function moveHero(direction)
@@ -39,10 +54,10 @@ function moveHero(direction)
 			fillGameFieldWithBackgroundColor();
 			//ctx.drawImage(hero, heroPositionX - heroWidth, heroPositionY, heroWidth, heroHeight);
 			//heroPositionX = heroPositionX - heroWidth;
-			ctx.clearRect(0,0,100,100); // erase the rectangle
+			//ctx.clearRect(0,0,100,100); // erase the rectangle
 			ctx.save();
 			ctx.scale(-1, 1);
-			ctx.translate(-100, 0);
+			//ctx.translate(-100, 0);
 			ctx.drawImage(hero, -heroPositionX, heroPositionY, heroWidth, heroHeight);
 			heroPositionX = heroPositionX - heroWidth;
 			ctx.restore();
@@ -88,12 +103,12 @@ function fillGameFieldWithBackgroundColor()
   
   
 // game main loop
-function loop()
+function loop(hero)
 {
   // logic
-  if(heroPositionX == heroStartPositionX && heroPositionY == heroStartPositionY) 
+  if(hero.positionX == hero.startPositionX && hero.positionY == hero.startPositionY) 
   {
-	drawHero();
+	   drawHero(hero);
   }
   
   // teleports
