@@ -1,18 +1,26 @@
 <html>
-<style>
-html, body {padding: 0;margin: 0;}
-* {box-sizing: border-box;}
-body {background: #ddd; padding: 50px;}
-canvas {
-  background: black;
-  margin: 0 auto;
-  display: block;
-}
-</style>
-	<canvas id="mc" width="1600" height="1080"></canvas>
+	<style>
+	html, body {padding: 0;margin: 0;}
+	* {box-sizing: border-box;}
+	body {background: #ddd; padding: 50px;}
+	canvas {
+	  background: black;
+	  margin: 0 auto;
+	  display: block;
+	}
+	
+	.mirrorY { transform: scale(-1, 1); }
+	
+	</style>
+
+	<img id="source" src="archer.jpg" width="100" height="100" class="mirrorY">
+	
+	<canvas id="mc" width="1600" height="1100"></canvas>
+	
 	<div style="display:none;">
 	  <img id="source" src="archer.jpg"
-		   width="300" height="227">
+		   width="100" height="100">
 	</div>
+
 	<script src="game3.js"></script>
 </html>

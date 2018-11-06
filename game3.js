@@ -16,15 +16,14 @@ var
   heroHeight         = 100;
   heroWidth          = 100;
   heroStartPositionX = canvas.width / 2 - heroWidth;
-  heroStartPositionY = canvas.height / 2 - heroHeight;
-  heroPositionX = canvas.width / 2 - heroWidth;
-  heroPositionY = canvas.height / 2 - heroHeight;
+  heroStartPositionY = canvas.height / 2 - heroHeight / 2;
+  heroPositionX = heroStartPositionX;
+  heroPositionY = heroStartPositionY;
   
  //var image = document.getElementById('source');
 var hero 	= new Image(heroWidth, heroHeight);   // Using optional size for image
 //hero.onload = drawHero; // Draw when image has loaded
 hero.src 	= 'archer.jpg';
-
 
 
  function drawHero() {
@@ -35,8 +34,49 @@ function moveHero(direction)
 {
 	if(direction == "left")
 	{
-		ctx.drawImage(hero, heroPositionX - heroWidth, heroPositionY, heroWidth, heroHeight);
-		heroPositionX = heroPositionX - heroWidth;
+		if(heroPositionX - heroWidth >= 0)
+		{
+			fillGameFieldWithBackgroundColor();
+			//ctx.drawImage(hero, heroPositionX - heroWidth, heroPositionY, heroWidth, heroHeight);
+			//heroPositionX = heroPositionX - heroWidth;
+			ctx.clearRect(0,0,100,100); // erase the rectangle
+			ctx.save();
+			ctx.scale(-1, 1);
+			ctx.translate(-100, 0);
+			ctx.drawImage(hero, -heroPositionX, heroPositionY, heroWidth, heroHeight);
+			heroPositionX = heroPositionX - heroWidth;
+			ctx.restore();
+		}
+	}
+	
+	if(direction == "right")
+	{
+		if(heroPositionX + heroWidth < canvas.width)
+		{
+			fillGameFieldWithBackgroundColor();
+			ctx.drawImage(hero, heroPositionX + heroWidth, heroPositionY, heroWidth, heroHeight);
+			heroPositionX = heroPositionX + heroWidth;
+		}
+	}
+	
+	if(direction == "up")
+	{
+		if(heroPositionY - heroHeight >= 0)
+		{	
+			fillGameFieldWithBackgroundColor();
+			ctx.drawImage(hero, heroPositionX, heroPositionY - heroHeight, heroWidth, heroHeight);
+			heroPositionY = heroPositionY - heroHeight;
+		}
+	}
+	
+	if(direction == "down")
+	{
+		if(heroPositionY + heroHeight < canvas.height)
+		{
+			fillGameFieldWithBackgroundColor();
+			ctx.drawImage(hero, heroPositionX, heroPositionY + heroHeight, heroWidth, heroHeight);
+			heroPositionY = heroPositionY + heroHeight;
+		}
 	}
 }
 
@@ -101,8 +141,8 @@ function spawnApple()
 {
   var
     newApple = {
-      x: ~~(Math.random() * canv.width),
-      y: ~~(Math.random() * canv.height),
+      x: ~~(Math.random() * canvas.width),
+      y: ~~(Math.random() * canvas.height),
       color: 'red'
     };
 
@@ -155,7 +195,7 @@ function changeDirection(evt)
   {
     setTimeout(function() {gs = true;}, 1000);
     fkp = true;
-    spawnApple();
+    //spawnApple();
   }
 
   if( cooldown )
@@ -166,19 +206,24 @@ function changeDirection(evt)
    */
   if( evt.keyCode == 37) // left arrow
     {
-		fillGameFieldWithBackgroundColor();
 		moveHero("left");
 	}
 
-  if( evt.keyCode == 38 && !(yv > 0) ) // top arrow
-    {xv = 0; yv = -speed;}
+ if( evt.keyCode == 38) // up arrow
+    {
+		moveHero("up");
+	}
 
-  if( evt.keyCode == 39 && !(xv < 0) ) // right arrow
-    {xv = speed; yv = 0;}
+ if( evt.keyCode == 39) // right arrow
+    {
+		moveHero("right");
+	}
 
-  if( evt.keyCode == 40 && !(yv < 0) ) // down arrow
-    {xv = 0; yv = speed;}
-
+  if( evt.keyCode == 40) // down arrow
+    {
+		moveHero("down");
+	}
+	
   cooldown = true;
   setTimeout(function() {cooldown = false;}, 100);
 }
