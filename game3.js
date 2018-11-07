@@ -13,25 +13,31 @@ var
   cooldown			 = false, // is key in cooldown mode
   score				 = 0; // current score
 
-  const gameField = createMatrix(16, 10);
+  //const gameField = createMatrix(16, 10);
 
-  function createObstacle()
+  function createObstacle(x, y)
   {
     var obj = {};
     obj.height = 100;
     obj.width = 100; 
     obj.image = new Image(obj.width, obj.height); 
     obj.image.src  = 'tree.jpg';
-    obj.x = 100;
-    obj.y = 100;
+    obj.imageGround = new Image(obj.width, obj.height); 
+    obj.imageGround.src  = 'ground.jpg';
+    obj.x = x;
+    obj.y = y;
 
     console.log(obj.x);
     console.log(obj.y);
     console.log(obj.width);
     console.log(obj.image.src);
 
-    obj.draw = function(){
+    obj.drawTree = function(){
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
+
+    obj.drawFloor = function(){
+      ctx.drawImage(this.imageGround, this.x, this.y, this.width, this.height);
     }
 
     return obj;
@@ -111,7 +117,9 @@ var
 }
 
 var heroStas = createNewHero('StasTest');
-var obstacle = createObstacle();
+var obstacleGround = createObstacle(200, 200);
+var obstacleTree = createObstacle(100, 100);
+
 
 window.onload = function() {
   document.addEventListener('keydown', changeDirection);
@@ -132,7 +140,8 @@ function loop(hero)
   if(hero.positionX == hero.startPositionX && hero.positionY == hero.startPositionY) 
   {
      hero.draw();
-     obstacle.draw();
+     obstacleGround.drawFloor();
+     obstacleTree.drawTree();
   }
   
   // teleports
