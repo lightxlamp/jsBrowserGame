@@ -13,6 +13,8 @@ var
   cooldown			 = false, // is key in cooldown mode
   score				 = 0; // current score
 
+  const gameField = createMatrix(16, 10);
+
   function createObstacle()
   {
     var obj = {};
