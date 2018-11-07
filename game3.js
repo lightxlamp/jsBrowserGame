@@ -13,6 +13,27 @@ var
   cooldown			 = false, // is key in cooldown mode
   score				 = 0; // current score
 
+  function createObstacle()
+  {
+    var obj = {};
+    obj.height = 100;
+    obj.width = 100; 
+    obj.image = new Image(obj.width, obj.height); 
+    obj.image.src  = 'tree.jpg';
+    obj.x = 100;
+    obj.y = 100;
+
+    console.log(obj.x);
+    console.log(obj.y);
+    console.log(obj.width);
+    console.log(obj.image.src);
+
+    obj.draw = function(){
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
+
+    return obj;
+  }
 
   function createNewHero(name) {
       var obj = {};
@@ -88,16 +109,12 @@ var
 }
 
 var heroStas = createNewHero('StasTest');
+var obstacle = createObstacle();
 
 window.onload = function() {
   document.addEventListener('keydown', changeDirection);
   setInterval(loop(heroStas), 1000/2); // 60 FPS
 } 
-
- function drawHero(hero) {
-	ctx.drawImage(heroImage, hero.positionX, hero.positionY, hero.width, hero.height);
-}
-
 
 function fillGameFieldWithBackgroundColor()
 {
@@ -113,6 +130,7 @@ function loop(hero)
   if(hero.positionX == hero.startPositionX && hero.positionY == hero.startPositionY) 
   {
      hero.draw();
+     obstacle.draw();
   }
   
   // teleports
