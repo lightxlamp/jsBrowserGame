@@ -19,86 +19,85 @@ var
       obj.name = name;
       obj.height = 100;
       obj.width = 100; 
-      obj.startPositionX = canvas.width / 2 - this.width;
-      obj.startPositionY = canvas.height / 2 - this.height / 2;
-      obj.positionX = this.startPositionX;
-      obj.positionY = this.startPositionY;
-      obj.heroImage = new Image(this.width, this.height); 
+      obj.startPositionX = canvas.width / 2 - obj.width;
+      obj.startPositionY = canvas.height / 2 - obj.height / 2;
+      obj.positionX = obj.startPositionX;
+      obj.positionY = obj.startPositionY;
+      obj.image = new Image(obj.width, obj.height); 
       //hero.onload = drawHero; // Draw when image has loaded
-      obj.heroImage.src  = 'archer.jpg';
+      obj.image.src  = 'archer.jpg';
 
       obj.greeting = function() {
         alert('Hi! I\'m ' + this.name + '.' + ' width = ' + this.width);
       };
 
       obj.draw = function(){
-        ctx.drawImage(this.heroImage, this.positionX, this.positionY, this.width, this.height);
+        ctx.drawImage(this.image, this.positionX, this.positionY, this.width, this.height);
+      }
+
+      obj.move = function(direction)
+      {
+      if(direction == "left")
+        {
+          if(obj.positionX - obj.width >= 0)
+          {
+            fillGameFieldWithBackgroundColor();
+            //ctx.drawImage(hero, heroPositionX - heroWidth, heroPositionY, heroWidth, heroHeight);
+            //heroPositionX = heroPositionX - heroWidth;
+            //ctx.clearRect(0,0,100,100); // erase the rectangle
+            ctx.save();
+            ctx.scale(-1, 1);
+            //ctx.translate(-100, 0);
+            ctx.drawImage(this.image, -this.positionX, this.positionY, this.width, this.height);
+            this.positionX -= this.width;
+            ctx.restore();
+          }
+        }
+
+        if(direction == "up")
+        {
+          if(obj.positionY - obj.height >= 0)
+          { 
+            fillGameFieldWithBackgroundColor();
+            ctx.drawImage(this.image, this.positionX, this.positionY - this.height, this.width, this.height);
+            this.positionY -= this.height;
+          }
+        }
+
+        if(direction == "right")
+        {
+          if(obj.positionX + obj.width < canvas.width)
+          {
+            fillGameFieldWithBackgroundColor(); 
+            ctx.drawImage(this.image, this.positionX + this.width, this.positionY, this.width, this.height);
+            this.positionX += this.width;
+          }
+        }
+
+        if(direction == "down")
+        {
+          if(this.positionY + this.height < canvas.height)
+          {
+            fillGameFieldWithBackgroundColor();
+            ctx.drawImage(this.image, this.positionX, this.positionY + this.height, this.width, this.height);
+            this.positionY += this.height;
+          }
+        }
       }
   return obj;
 }
 
 var heroStas = createNewHero('StasTest');
-heroStas.draw();
 
-/*
 window.onload = function() {
   document.addEventListener('keydown', changeDirection);
   setInterval(loop(heroStas), 1000/2); // 60 FPS
-} */
+} 
 
  function drawHero(hero) {
 	ctx.drawImage(heroImage, hero.positionX, hero.positionY, hero.width, hero.height);
 }
 
-function moveHero(direction)
-{
-	if(direction == "left")
-	{
-		if(heroPositionX - heroWidth >= 0)
-		{
-			fillGameFieldWithBackgroundColor();
-			//ctx.drawImage(hero, heroPositionX - heroWidth, heroPositionY, heroWidth, heroHeight);
-			//heroPositionX = heroPositionX - heroWidth;
-			//ctx.clearRect(0,0,100,100); // erase the rectangle
-			ctx.save();
-			ctx.scale(-1, 1);
-			//ctx.translate(-100, 0);
-			ctx.drawImage(hero, -heroPositionX, heroPositionY, heroWidth, heroHeight);
-			heroPositionX = heroPositionX - heroWidth;
-			ctx.restore();
-		}
-	}
-	
-	if(direction == "right")
-	{
-		if(heroPositionX + heroWidth < canvas.width)
-		{
-			fillGameFieldWithBackgroundColor();
-			ctx.drawImage(hero, heroPositionX + heroWidth, heroPositionY, heroWidth, heroHeight);
-			heroPositionX = heroPositionX + heroWidth;
-		}
-	}
-	
-	if(direction == "up")
-	{
-		if(heroPositionY - heroHeight >= 0)
-		{	
-			fillGameFieldWithBackgroundColor();
-			ctx.drawImage(hero, heroPositionX, heroPositionY - heroHeight, heroWidth, heroHeight);
-			heroPositionY = heroPositionY - heroHeight;
-		}
-	}
-	
-	if(direction == "down")
-	{
-		if(heroPositionY + heroHeight < canvas.height)
-		{
-			fillGameFieldWithBackgroundColor();
-			ctx.drawImage(hero, heroPositionX, heroPositionY + heroHeight, heroWidth, heroHeight);
-			heroPositionY = heroPositionY + heroHeight;
-		}
-	}
-}
 
 function fillGameFieldWithBackgroundColor()
 {
@@ -113,7 +112,7 @@ function loop(hero)
   // logic
   if(hero.positionX == hero.startPositionX && hero.positionY == hero.startPositionY) 
   {
-	   drawHero(hero);
+     hero.draw();
   }
   
   // teleports
@@ -225,23 +224,27 @@ function changeDirection(evt)
     4 directional movement.
    */
   if( evt.keyCode == 37) // left arrow
-    {
-		moveHero("left");
+  {
+		console.log("right key pressed");
+    heroStas.move("left");
 	}
 
  if( evt.keyCode == 38) // up arrow
-    {
-		moveHero("up");
+  {
+		console.log("up key pressed");
+    heroStas.move("up");
 	}
 
  if( evt.keyCode == 39) // right arrow
-    {
-		moveHero("right");
+  {
+    console.log("right key pressed");
+		heroStas.move("right");
 	}
 
   if( evt.keyCode == 40) // down arrow
-    {
-		moveHero("down");
+  {
+    console.log("down key pressed");
+    heroStas.move("down");
 	}
 	
   cooldown = true;
